@@ -1,0 +1,66 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    background-color: #f8f9fa;
+    font-family: sans-serif;
+}
+
+.container {
+    width: 40rem;
+    background-color: #888;
+    margin: 15rem auto;
+    padding: 2.2rem;
+    border-radius: 10px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.8rem;
+}
+
+.btn {
+    padding: 2rem;
+    text-align: center;
+    font-size: 3rem;
+    color: #333;
+    border: 1px solid #333;
+    background-color: #f8f9fa;
+    border-radius: 2px;
+}
+
+.display {
+    text-align: right;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+.output__main,
+.output__secondary {
+    border: none;
+    text-align: right;
+    font-size: 4.5rem;
+    padding: 2rem 1rem 0.2rem 1rem;
+}
+
+.output__secondary {
+    font-size: 2rem;
+}
+
+.btn__clear {
+    grid-column: 1 / span 2;
+    background-color: #41c69e;
+}
+
+.btn__delete {
+    grid-column: span 2;
+    background-color: #f03e3e;
+}
