@@ -6,6 +6,7 @@ const deletes = document.querySelector('.btn__delete');
 const clear = document.querySelector('.btn__clear');
 const btnsContainer = document.querySelector('.buttons');
 const container = document.querySelector('.container');
+const btnEqual = document.querySelector('.btn__operation__equal');
 
 // functions
 const add = function (a, b) {
@@ -31,13 +32,20 @@ function operate(a, b, op) {
     if (op == '/') return divide(a, b);
 }
 
+const disableOperator = function () {
+    operations.forEach((el) => el.setAttribute('disabled', 'disabled'));
+};
+
+const enableOperator = function () {
+    operations.forEach((el) => el.removeAttribute('disabled'));
+};
+
+// global variables
 let firstNum = '';
 let secondNum = '';
 let operator = '';
 let stateTracker = false;
 let result;
-
-const btnEqual = document.querySelector('.btn__operation__equal');
 
 numbers.forEach((el) =>
     el.addEventListener('click', function (e) {
@@ -45,12 +53,13 @@ numbers.forEach((el) =>
         outputMain.textContent += el.textContent;
 
         firstNum = +outputMain.textContent;
+        enableOperator();
     })
 );
 
 operations.forEach((el) =>
     el.addEventListener('click', function (e) {
-        console.log(e.target.dataset.operation);
+        disableOperator();
         if (operator.length != 0) {
             result = operate(secondNum, firstNum, operator);
             operator = e.target.dataset.operation;
@@ -74,5 +83,6 @@ btnEqual.addEventListener('click', function (e) {
     const resultEqual = operate(secondNum, firstNum, operator);
     outputSecondary.textContent = `${resultEqual} ${operator}`;
     outputMain.textContent = '0';
+    enableOperator();
     console.log(firstNum, secondNum);
 });
