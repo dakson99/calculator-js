@@ -53,6 +53,7 @@ body {
 
 .output__secondary {
     font-size: 2rem;
+    height: 4rem;
 }
 
 .btn__clear {
