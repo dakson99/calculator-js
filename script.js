@@ -27,10 +27,10 @@ const divide = function (a, b) {
 };
 
 function operate(a, b, op) {
-    if (op == '+') return add(a, b);
-    if (op == '*') return multiply(a, b);
-    if (op == '-') return subtract(a, b);
-    if (op == '/') return divide(a, b);
+    if (op === '+') return add(a, b);
+    if (op === '*') return multiply(a, b);
+    if (op === '-') return subtract(a, b);
+    if (op === '/') return divide(a, b);
 }
 
 const disableOperator = function () {
@@ -63,7 +63,6 @@ operations.forEach((el) =>
         disableOperator();
         btnDot.removeAttribute('disabled');
 
-        if (outputMain.textContent === '0') firstNum = 0;
         if (operator === '') {
             operator = e.target.dataset.operation;
             secondNum = firstNum;
@@ -80,26 +79,20 @@ operations.forEach((el) =>
             outputMain.textContent = '0';
             outputSecondary.textContent = `${secondNum} ${operator}`;
         }
-
-        console.log(firstNum, secondNum);
     })
 );
 
 btnEqual.addEventListener('click', function (e) {
-    const resultEqual = operate(secondNum, firstNum, operator);
-    outputSecondary.textContent = `${secondNum} ${operator} ${firstNum} = ${resultEqual} `;
+    result = operate(secondNum, firstNum, operator);
+
+    outputSecondary.textContent = `${secondNum} ${operator} ${firstNum} = ${result} `;
+
     outputMain.textContent = '0';
+
     enableOperator();
     btnDot.removeAttribute('disabled');
+
     if (firstNum === 0 && operator === '/') alert("You can't divide by 0");
-    if (firstNum === '' && secondNum === '') {
-        firstNum = '';
-        secondNum = '';
-        operator = '';
-        result = '';
-        outputMain.textContent = '0';
-        outputSecondary.textContent = '';
-    }
 });
 
 btnClear.addEventListener('click', function (e) {
