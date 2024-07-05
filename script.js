@@ -1,3 +1,4 @@
+// selectors
 const numbers = document.querySelectorAll('.btn__number');
 const operations = document.querySelectorAll('.btn__operation');
 const outputMain = document.querySelector('.output__main');
@@ -47,11 +48,18 @@ const computeResult = function () {
     result = Math.round(operate(secondNum, firstNum, operator) * 100) / 100;
 };
 
-const calcDisplayValues = function (valueNum, e) {
+const storeDisplayValues = function (variable, e) {
     operator = e.target.dataset.operation;
-    secondNum = valueNum;
+    secondNum = variable;
     outputMain.textContent = '0';
     outputSecondary.textContent = `${secondNum} ${operator}`;
+};
+
+const checkZeroDivisor = function () {
+    if (firstNum === 0 && operator === '/') {
+        alert("You can't divide by 0!");
+        resetScreen();
+    }
 };
 
 const disableOperator = function () {
@@ -60,6 +68,13 @@ const disableOperator = function () {
 
 const enableOperator = function () {
     operations.forEach((el) => el.removeAttribute('disabled'));
+};
+
+const deleteLastDigit = function () {
+    outputMain.textContent = outputMain.textContent.slice(0, -1);
+
+    // prevent deleting all the numbers from the screen
+    if (outputMain.textContent.length < 1) outputMain.textContent = '0';
 };
 
 // global variables
@@ -72,63 +87,65 @@ let result;
 // event listeners
 numbers.forEach((el) =>
     el.addEventListener('click', function (e) {
-        if (outputMain.textContent === '0') outputMain.textContent = '';
+        if (outputMain.textContent === '0') {
+            outputMain.textContent = '';
+        }
         outputMain.textContent += el.textContent;
 
-        firstNum = +outputMain.textContent;
+        firstNum = +outputMain.textContent; // store firstNum
 
         enableOperator();
 
+        // limit number of digits
         if (firstNum.toString().length > 9) {
             alert("You can't input a number containing more than 9 digits!");
         }
+        console.log(firstNum, secondNum);
     })
 );
 
 operations.forEach((el) =>
     el.addEventListener('click', function (e) {
-        disableOperator();
-        btnDot.removeAttribute('disabled');
-        if (!firstNum) return;
+        // prevent from entering an operator before entering a digit
+        if (firstNum === '' && secondNum === '') return;
 
         // prevent operators from incrementing value
+        disableOperator();
+        btnDot.removeAttribute('disabled');
+
+        // main logic; storing values
         if (operator === '') {
-            calcDisplayValues(firstNum, e);
-            firstNum = '';
+            storeDisplayValues(firstNum, e); //  secondNum = firstNum
+            firstNum = ''; // empty firstNum (store again from display)
         } else {
             computeResult();
-            calcDisplayValues(result, e);
+            storeDisplayValues(result, e); // secondNum = result (chain operations)
         }
+        checkZeroDivisor();
     })
 );
 
 btnEqual.addEventListener('click', function (e) {
-    if (!firstNum) return;
-
     computeResult();
+    checkZeroDivisor();
+    if (secondNum === '') return;
 
     outputMain.textContent = '0';
     outputSecondary.textContent = `${secondNum} ${operator} ${firstNum} = ${result} `;
 
     enableOperator();
     btnDot.removeAttribute('disabled');
-
-    if (firstNum === 0 && operator === '/') alert("You can't divide by 0");
-    if (secondNum === '') outputSecondary.textContent = '';
 });
 
-btnClear.addEventListener('click', function (e) {
-    resetScreen();
-});
+btnClear.addEventListener('click', resetScreen);
 
-btnDelete.addEventListener('click', function (e) {
-    outputMain.textContent = outputMain.textContent.slice(0, -1);
-    if (outputMain.textContent.length < 1) outputMain.textContent = '0';
-});
+btnDelete.addEventListener('click', deleteLastDigit);
 
+// delete last digit on Backspace
+document.addEventListener('keydown', deleteLastDigit);
+
+// add decimal
 btnDot.addEventListener('click', function (e) {
     outputMain.textContent = outputMain.textContent + '.';
-
-    // prevent deleting all the numbers from the screen
     btnDot.setAttribute('disabled', 'disabled');
 });
