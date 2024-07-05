@@ -33,6 +33,27 @@ function operate(a, b, op) {
     if (op === '/') return divide(a, b);
 }
 
+const resetScreen = function () {
+    firstNum = '';
+    secondNum = '';
+    operator = '';
+    result = '';
+    outputMain.textContent = '0';
+    outputSecondary.textContent = '';
+    btnDot.removeAttribute('disabled');
+};
+
+const computeResult = function () {
+    result = operate(secondNum, firstNum, operator);
+};
+
+const calcDisplayValues = function (valueNum, e) {
+    operator = e.target.dataset.operation;
+    secondNum = valueNum;
+    outputMain.textContent = '0';
+    outputSecondary.textContent = `${secondNum} ${operator}`;
+};
+
 const disableOperator = function () {
     operations.forEach((el) => el.setAttribute('disabled', 'disabled'));
 };
@@ -48,22 +69,18 @@ let operator = '';
 let stateTracker = false;
 let result;
 
+// event listeners
 numbers.forEach((el) =>
     el.addEventListener('click', function (e) {
         if (outputMain.textContent === '0') outputMain.textContent = '';
         outputMain.textContent += el.textContent;
 
         firstNum = +outputMain.textContent;
+
         enableOperator();
+
         if (firstNum.toString().length > 9) {
             alert("You can't input a number containing more than 9 digits!");
-            firstNum = '';
-            secondNum = '';
-            operator = '';
-            result = '';
-            outputMain.textContent = '0';
-            outputSecondary.textContent = '';
-            btnDot.removeAttribute('disabled');
         }
     })
 );
@@ -72,34 +89,26 @@ operations.forEach((el) =>
     el.addEventListener('click', function (e) {
         disableOperator();
         btnDot.removeAttribute('disabled');
+        if (!firstNum) return;
 
+        // prevent operators from incrementing value
         if (operator === '') {
-            operator = e.target.dataset.operation;
-            secondNum = firstNum;
+            calcDisplayValues(firstNum, e);
             firstNum = '';
-            outputMain.textContent = '0';
-            outputSecondary.textContent = `${secondNum} ${operator}`;
-            console.log(firstNum, secondNum, result);
         } else {
-            operator.length != 0;
-            result = operate(secondNum, firstNum, operator);
-            result = result.toFixed(2);
-            operator = e.target.dataset.operation;
-
-            secondNum = result;
-            outputMain.textContent = '0';
-            outputSecondary.textContent = `${secondNum} ${operator}`;
+            computeResult();
+            calcDisplayValues(result, e);
         }
     })
 );
 
 btnEqual.addEventListener('click', function (e) {
-    result = operate(secondNum, firstNum, operator);
-    result = result.toFixed(2);
+    if (!firstNum) return;
 
-    outputSecondary.textContent = `${secondNum} ${operator} ${firstNum} = ${result} `;
+    computeResult();
 
     outputMain.textContent = '0';
+    outputSecondary.textContent = `${secondNum} ${operator} ${firstNum} = ${result} `;
 
     enableOperator();
     btnDot.removeAttribute('disabled');
@@ -109,13 +118,7 @@ btnEqual.addEventListener('click', function (e) {
 });
 
 btnClear.addEventListener('click', function (e) {
-    firstNum = '';
-    secondNum = '';
-    operator = '';
-    result = '';
-    outputMain.textContent = '0';
-    outputSecondary.textContent = '';
-    btnDot.removeAttribute('disabled');
+    resetScreen();
 });
 
 btnDelete.addEventListener('click', function (e) {
@@ -125,5 +128,7 @@ btnDelete.addEventListener('click', function (e) {
 
 btnDot.addEventListener('click', function (e) {
     outputMain.textContent = outputMain.textContent + '.';
+
+    // prevent deleting all the numbers from the screen
     btnDot.setAttribute('disabled', 'disabled');
 });
