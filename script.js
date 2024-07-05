@@ -128,7 +128,8 @@ operations.forEach((el) =>
 btnEqual.addEventListener('click', function (e) {
     computeResult();
     checkZeroDivisor();
-    if (secondNum === '') return;
+    if (firstNum === '' || operator === '') return;
+    console.log(firstNum, secondNum, operator);
 
     outputMain.textContent = '0';
     outputSecondary.textContent = `${secondNum} ${operator} ${firstNum} = ${result} `;
