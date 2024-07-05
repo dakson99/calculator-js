@@ -44,7 +44,7 @@ const resetScreen = function () {
 };
 
 const computeResult = function () {
-    result = operate(secondNum, firstNum, operator);
+    result = Math.round(operate(secondNum, firstNum, operator) * 100) / 100;
 };
 
 const calcDisplayValues = function (valueNum, e) {
