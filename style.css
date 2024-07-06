@@ -96,3 +96,14 @@ body {
 .btn__delete:active {
     background-color: #c03232;
 }
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    height: 3rem;
+    width: 100%;
+    text-align: center;
+    font-size: 1.6rem;
+    color: #666;
+}
