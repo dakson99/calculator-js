@@ -24,10 +24,45 @@ class Calculator {
         if (num === '.' && this.firstNum.toString().length === 0) return;
         this.firstNum = this.firstNum.toString() + num.toString();
     }
+    chooseOperation(op) {
+        if (this.firstNum === '') return;
+        if (this.secondNum !== '') this.operate();
 
-    operate() { }
+        this.secondNum = this.firstNum;
+        this.firstNum = '';
+        this.operator = op;
+    }
+
+    operate() {
+        if (this.first === undefined || this.secondNum === undefined) return;
+
+        let result;
+        const first = Number(this.firstNum);
+        const second = Number(this.secondNum);
+
+        switch (this.operator) {
+            case '+':
+                result = second + first;
+                break;
+            case '-':
+                result = second - first;
+                break;
+            case '*':
+                result = second * first;
+                break;
+            case '/':
+                result = second / first;
+                break;
+            default:
+                return;
+        }
+        this.firstNum = result;
+        this.secondNum = '';
+        this.operation = undefined;
+    }
 
     updateDisplay() {
+        this.outputSecondary.textContent = `${this.secondNum} ${this.operator}`;
         this.outputMain.textContent = this.firstNum;
     }
 
@@ -47,3 +82,9 @@ numbers.forEach((num) =>
     })
 );
 
+operations.forEach((op) =>
+    op.addEventListener('click', function () {
+        calculator.chooseOperation(op.textContent);
+        calculator.updateDisplay();
+    })
+);
