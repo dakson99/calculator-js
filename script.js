@@ -73,6 +73,10 @@ class Calculator {
     }
 
     updateDisplay() {
+        if (this.firstNum === '')
+            this.outputSecondary.textContent = `${this.secondNum} ${this.operator}`;
+        if (this.secondNum === '') this.outputSecondary.textContent = '';
+
         this.outputMain.textContent = this.firstNum;
     }
 
