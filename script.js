@@ -47,13 +47,13 @@ class Calculator {
 
         switch (this.operator) {
             case '+':
-                result = (second + first).toFixed(2);
+                result = second + first;
                 break;
             case '-':
-                result = (second - first).toFixed(2);
+                result = second - first;
                 break;
             case '*':
-                result = (second * first).toFixed(2);
+                result = second * first;
                 break;
             case '/':
                 if (first === 0) {
@@ -61,7 +61,7 @@ class Calculator {
                     this.clear();
                     return;
                 } else {
-                    result = (second / first).toFixed(2);
+                    result = second / first;
                 }
                 break;
             default:
@@ -76,7 +76,6 @@ class Calculator {
         if (this.firstNum === '')
             this.outputSecondary.textContent = `${this.secondNum} ${this.operator}`;
         if (this.secondNum === '') this.outputSecondary.textContent = '';
-
         this.outputMain.textContent = this.firstNum;
     }
 
