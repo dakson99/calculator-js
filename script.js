@@ -11,6 +11,10 @@ const btnDelete = document.querySelector('[data-delete]');
 const btnClear = document.querySelector('[data-all-clear]');
 
 class Calculator {
+    firstNum;
+    secondNum;
+    operator;
+
     constructor(outputMain, outputSecondary) {
         this.outputMain = outputMain;
         this.outputSecondary = outputSecondary;
@@ -22,19 +26,20 @@ class Calculator {
     appendNumber(num) {
         if (num === '.' && this.firstNum.toString().includes('.')) return;
         if (num === '.' && this.firstNum.toString().length === 0) return;
+
         this.firstNum = this.firstNum.toString() + num.toString();
     }
     chooseOperation(op) {
         if (this.firstNum === '') return;
-        if (this.secondNum !== '') this.operate();
-
+        if (this.secondNum !== '') {
+            this.operate();
+        }
         this.secondNum = this.firstNum;
         this.firstNum = '';
         this.operator = op;
     }
 
     operate() {
-        if (this.first === undefined || this.secondNum === undefined) return;
 
         let result;
         const first = Number(this.firstNum);
@@ -42,34 +47,43 @@ class Calculator {
 
         switch (this.operator) {
             case '+':
-                result = second + first;
+                result = (second + first).toFixed(2);
                 break;
             case '-':
-                result = second - first;
+                result = (second - first).toFixed(2);
                 break;
             case '*':
-                result = second * first;
+                result = (second * first).toFixed(2);
                 break;
             case '/':
-                result = second / first;
+                if (first === 0) {
+                    alert("Can't divide by 0 !");
+                    this.clear();
+                    return;
+                } else {
+                    result = (second / first).toFixed(2);
+                }
                 break;
             default:
                 return;
         }
         this.firstNum = result;
         this.secondNum = '';
-        this.operation = undefined;
+        this.operation = '';
     }
 
     updateDisplay() {
-        this.outputSecondary.textContent = `${this.secondNum} ${this.operator}`;
         this.outputMain.textContent = this.firstNum;
+    }
+
+    deleteLastDigit() {
+        this.firstNum = this.firstNum.slice(0, -1);
     }
 
     clear() {
         this.firstNum = '';
         this.secondNum = '';
-        this.operator = '';
+        this.operator = undefined;
     }
 }
 
@@ -88,3 +102,18 @@ operations.forEach((op) =>
         calculator.updateDisplay();
     })
 );
+
+btnEqual.addEventListener('click', function () {
+    calculator.operate();
+    calculator.updateDisplay();
+});
+
+btnDelete.addEventListener('click', function () {
+    calculator.deleteLastDigit();
+    calculator.updateDisplay();
+});
+
+btnClear.addEventListener('click', function () {
+    calculator.clear();
+    calculator.updateDisplay();
+});
